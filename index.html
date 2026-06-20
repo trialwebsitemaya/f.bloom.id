@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>First Bloom — Bloom Together With Ollie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF6E9;
+    --cream-deep:#F4ECD6;
+    --leaf-deep:#4B6B33;
+    --leaf:#7B9A56;
+    --leaf-soft:#A9C285;
+    --gold:#E8A93C;
+    --gold-light:#F6DC9A;
+    --coral:#F08A6C;
+    --sky:#7FBEC9;
+    --ink:#33401F;
+    --white:#FFFFFF;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:'Quicksand', sans-serif;
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+
+  h1,h2,h3,h4{
+    font-family:'Baloo 2', sans-serif;
+    color:var(--leaf-deep);
+    line-height:1.15;
+  }
+
+  a{text-decoration:none; color:inherit;}
+  ul{list-style:none;}
+  img{max-width:100%; display:block;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 28px;
+  }
+
+  /* ===== decorative blobs ===== */
+  .blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(0px);
+    z-index:0;
+  }
+
+  /* ===== NAV ===== */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(251,246,233,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:2px solid var(--gold-light);
+  }
+  nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 28px;
+    max-width:1180px;
+    margin:0 auto;
+  }
+  .brandmark{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:1.3rem;
+    color:var(--leaf-deep);
+  }
+  .brandmark .egg{
+    width:36px; height:36px;
+    background:var(--gold);
+    border-radius:50% 50% 50% 50% / 55% 55% 45% 45%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.1rem;
+    box-shadow:0 3px 0 var(--leaf-deep);
+    flex-shrink:0;
+  }
+  .navlinks{
+    display:flex;
+    gap:30px;
+    font-weight:600;
+    font-size:0.95rem;
+  }
+  .navlinks a{
+    position:relative;
+    color:var(--ink);
+    padding:6px 0;
+    transition:color .2s ease;
+  }
+  .navlinks a:hover{color:var(--leaf-deep);}
+  .navlinks a::after{
+    content:'';
+    position:absolute; left:0; bottom:0;
+    width:0%; height:3px;
+    background:var(--gold);
+    border-radius:3px;
+    transition:width .25s ease;
+  }
+  .navlinks a:hover::after{width:100%;}
+  .nav-cta{
+    background:var(--leaf-deep);
+    color:var(--cream) !important;
+    padding:10px 22px;
+    border-radius:999px;
+    font-weight:700;
+    font-size:0.92rem;
+    box-shadow:0 4px 0 #344d22;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .nav-cta:hover{transform:translateY(2px); box-shadow:0 2px 0 #344d22;}
+  .menu-toggle{display:none; font-size:1.6rem; background:none; border:none; color:var(--leaf-deep); cursor:pointer;}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;
+    padding:70px 0 50px;
+    overflow:hidden;
+  }
+  .hero .blob1{width:420px; height:420px; background:var(--gold-light); opacity:.55; top:-160px; right:-120px;}
+  .hero .blob2{width:280px; height:280px; background:var(--leaf-soft); opacity:.4; bottom:-100px; left:-90px;}
+
+  .hero-grid{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:1.05fr 0.95fr;
+    gap:50px;
+    align-items:center;
+  }
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--white);
+    border:2px dashed var(--gold);
+    color:var(--leaf-deep);
+    font-weight:700;
+    font-size:0.85rem;
+    padding:7px 16px;
+    border-radius:999px;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:3.4rem;
+    font-weight:800;
+    margin-bottom:18px;
+    letter-spacing:-0.5px;
+  }
+  .hero h1 .accent{color:var(--coral);}
+  .hero h1 .accent2{color:var(--gold);}
+  .hero p.lead{
+    font-size:1.15rem;
+    color:#4d5a3a;
+    max-width:480px;
+    margin-bottom:30px;
+  }
+  .hero-ctas{
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    margin-bottom:34px;
+  }
+  .btn-primary{
+    background:var(--gold);
+    color:var(--leaf-deep);
+    font-weight:700;
+    padding:15px 30px;
+    border-radius:999px;
+    box-shadow:0 5px 0 #c4862a;
+    transition:transform .15s ease, box-shadow .15s ease;
+    font-size:1.02rem;
+  }
+  .btn-primary:hover{transform:translateY(3px); box-shadow:0 2px 0 #c4862a;}
+  .btn-secondary{
+    background:transparent;
+    color:var(--leaf-deep);
+    font-weight:700;
+    padding:15px 26px;
+    border-radius:999px;
+    border:2.5px solid var(--leaf-deep);
+    transition:background .2s ease, color .2s ease;
+    font-size:1.02rem;
+  }
+  .btn-secondary:hover{background:var(--leaf-deep); color:var(--cream);}
+
+  .hero-stats{
+    display:flex;
+    gap:30px;
+  }
+  .hero-stats div{display:flex; flex-direction:column;}
+  .hero-stats .num{font-family:'Baloo 2'; font-weight:800; font-size:1.7rem; color:var(--coral);}
+  .hero-stats .label{font-size:0.82rem; color:#5c6a48; font-weight:600;}
+
+  .hero-art{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+  .ollie-card{
+    position:relative;
+    width:100%;
+    max-width:420px;
+    aspect-ratio:1/1.05;
+    background:var(--white);
+    border-radius:38% 62% 60% 40% / 45% 40% 60% 55%;
+    box-shadow:0 18px 0 -6px var(--gold-light), 0 20px 40px rgba(75,107,51,0.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    animation:floaty 5s ease-in-out infinite;
+  }
+  @keyframes floaty{
+    0%,100%{transform:translateY(0) rotate(-1deg);}
+    50%{transform:translateY(-14px) rotate(1deg);}
+  }
+  .ollie-card svg{width:78%; height:78%;}
+  .sparkle{
+    position:absolute;
+    font-size:1.6rem;
+    animation:spin 6s linear infinite;
+  }
+  .sparkle.s1{top:5%; left:0%; animation-duration:7s;}
+  .sparkle.s2{bottom:8%; right:2%; animation-duration:5s;}
+  .sparkle.s3{top:50%; right:-4%; animation-duration:9s;}
+  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+
+  /* ===== marquee strip ===== */
+  .marquee-strip{
+    background:var(--leaf-deep);
+    color:var(--cream);
+    padding:14px 0;
+    overflow:hidden;
+    white-space:nowrap;
+    font-family:'Baloo 2';
+    font-weight:600;
+    font-size:1.05rem;
+  }
+  .marquee-track{
+    display:inline-flex;
+    animation:scroll 26s linear infinite;
+  }
+  .marquee-track span{
+    padding:0 30px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+  @keyframes scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  /* ===== SECTION GENERIC ===== */
+  section{
+    position:relative;
+    padding:90px 0;
+  }
+  .section-head{
+    text-align:center;
+    max-width:620px;
+    margin:0 auto 56px;
+  }
+  .section-head .eyebrow{margin-bottom:16px;}
+  .section-head h2{
+    font-size:2.4rem;
+    margin-bottom:14px;
+  }
+  .section-head p{
+    color:#586645;
+    font-size:1.05rem;
+  }
+
+  /* ===== ABOUT / FILOSOFI ===== */
+  .about{background:var(--cream-deep);}
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:60px;
+    align-items:center;
+  }
+  .about-art{
+    position:relative;
+    background:var(--white);
+    border-radius:32px;
+    padding:36px;
+    box-shadow:0 14px 0 -4px var(--leaf-soft);
+  }
+  .meaning-row{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    padding:14px 0;
+    border-bottom:1px dashed #cdd9b8;
+  }
+  .meaning-row:last-child{border-bottom:none;}
+  .meaning-row .ic{
+    width:42px; height:42px;
+    background:var(--gold-light);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.2rem;
+    flex-shrink:0;
+  }
+  .meaning-row h4{font-size:1.02rem; margin-bottom:3px;}
+  .meaning-row p{font-size:0.92rem; color:#5c6a48;}
+
+  .about-text h2{font-size:2.1rem; margin-bottom:18px;}
+  .about-text p{color:#4d5a3a; margin-bottom:16px; font-size:1.02rem;}
+  .about-text .ollie-quote{
+    background:var(--leaf-deep);
+    color:var(--cream);
+    padding:22px 26px;
+    border-radius:20px;
+    font-family:'Baloo 2';
+    font-size:1.05rem;
+    margin-top:22px;
+    position:relative;
+  }
+  .about-text .ollie-quote::before{
+    content:'🐣';
+    position:absolute;
+    top:-18px; left:24px;
+    font-size:1.8rem;
+    background:var(--gold-light);
+    width:40px;height:40px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+
+  /* ===== GROWTH PATH / PROGRAM (signature element) ===== */
+  .path-section{
+    position:relative;
+  }
+  .path-section .section-head{margin-bottom:70px;}
+  .path-track{
+    position:relative;
+    max-width:980px;
+    margin:0 auto;
+  }
+  .path-line{
+    position:absolute;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:4px;
+    background-image:repeating-linear-gradient(to bottom, var(--gold) 0, var(--gold) 10px, transparent 10px, transparent 20px);
+    transform:translateX(-50%);
+    z-index:0;
+  }
+  .path-step{
+    position:relative;
+    display:grid;
+    grid-template-columns:1fr 70px 1fr;
+    align-items:center;
+    margin-bottom:18px;
+    z-index:1;
+  }
+  .path-step .leafnode{
+    width:70px; height:70px;
+    background:var(--gold);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.7rem;
+    box-shadow:0 0 0 8px var(--cream), 0 6px 0 #c4862a;
+    margin:0 auto;
+  }
+  .path-card{
+    background:var(--white);
+    border-radius:24px;
+    padding:26px 28px;
+    box-shadow:0 10px 28px rgba(75,107,51,0.10);
+  }
+  .path-step:nth-child(even) .path-card{grid-column:3;}
+  .path-step:nth-child(even) .spacer{grid-column:1;}
+  .path-step:nth-child(odd) .path-card{grid-column:1;}
+  .path-card h4{font-size:1.15rem; margin-bottom:6px;}
+  .path-card p{font-size:0.92rem; color:#5c6a48;}
+  .path-card .tag{
+    display:inline-block;
+    font-size:0.72rem;
+    font-weight:700;
+    color:var(--coral);
+    background:#fdeae2;
+    padding:3px 10px;
+    border-radius:999px;
+    margin-bottom:8px;
+  }
+
+  /* ===== ACTIVITIES GRID ===== */
+  .activities{background:var(--cream-deep);}
+  .act-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+  }
+  .act-card{
+    background:var(--white);
+    border-radius:22px;
+    padding:26px 20px;
+    text-align:center;
+    transition:transform .2s ease, box-shadow .2s ease;
+    box-shadow:0 8px 0 -3px var(--leaf-soft);
+  }
+  .act-card:hover{transform:translateY(-6px);}
+  .act-card .emoji{
+    width:62px; height:62px;
+    background:var(--gold-light);
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.7rem;
+    margin:0 auto 14px;
+  }
+  .act-card h4{font-size:1rem; margin-bottom:6px;}
+  .act-card p{font-size:0.85rem; color:#5c6a48;}
+
+  /* ===== CLASS INFO ===== */
+  .classinfo .wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:50px;
+    align-items:center;
+  }
+  .classinfo-card{
+    background:var(--leaf-deep);
+    border-radius:32px;
+    padding:42px;
+    color:var(--cream);
+    position:relative;
+    overflow:hidden;
+  }
+  .classinfo-card::after{
+    content:'';
+    position:absolute;
+    width:220px; height:220px;
+    background:var(--leaf);
+    opacity:.4;
+    border-radius:50%;
+    bottom:-90px; right:-70px;
+  }
+  .classinfo-card h3{
+    color:var(--gold-light);
+    font-size:1.6rem;
+    margin-bottom:24px;
+  }
+  .classinfo-list{position:relative; z-index:1;}
+  .classinfo-list li{
+    display:flex;
+    gap:14px;
+    align-items:flex-start;
+    margin-bottom:18px;
+    font-weight:600;
+  }
+  .classinfo-list li .dot{
+    width:26px;height:26px;
+    background:var(--gold);
+    color:var(--leaf-deep);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.85rem;
+    flex-shrink:0;
+    margin-top:2px;
+  }
+  .classinfo-text h2{font-size:2.1rem; margin-bottom:18px;}
+  .classinfo-text p{color:#4d5a3a; margin-bottom:20px;}
+  .schedule-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    background:var(--gold-light);
+    padding:14px 22px;
+    border-radius:18px;
+    font-weight:700;
+    color:var(--leaf-deep);
+    margin-bottom:14px;
+  }
+
+  /* ===== WHY / KEUNGGULAN ===== */
+  .why-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:22px;
+  }
+  .why-card{
+    background:var(--white);
+    border-radius:24px;
+    padding:30px 24px;
+    border-top:5px solid var(--gold);
+  }
+  .why-card:nth-child(2){border-top-color:var(--coral);}
+  .why-card:nth-child(3){border-top-color:var(--sky);}
+  .why-card:nth-child(4){border-top-color:var(--leaf);}
+  .why-card .num{
+    font-family:'Baloo 2';
+    font-weight:800;
+    font-size:1.6rem;
+    color:var(--gold-light);
+    -webkit-text-stroke:1.5px var(--gold);
+    margin-bottom:10px;
+  }
+  .why-card h4{font-size:1.08rem; margin-bottom:10px;}
+  .why-card p{font-size:0.9rem; color:#5c6a48;}
+
+  /* ===== CTA / CONTACT ===== */
+  .cta-section{
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-box{
+    background:var(--gold);
+    border-radius:36px;
+    padding:60px 50px;
+    display:grid;
+    grid-template-columns:1.2fr 1fr;
+    gap:40px;
+    align-items:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .cta-box .blob{background:var(--white); opacity:.18;}
+  .cta-box .blob1{width:260px;height:260px; top:-100px; right:-60px;}
+  .cta-box h2{
+    color:var(--leaf-deep);
+    font-size:2.2rem;
+    margin-bottom:14px;
+  }
+  .cta-box p{
+    color:#5a4318;
+    font-size:1.02rem;
+    margin-bottom:0;
+    max-width:420px;
+  }
+  .cta-form{
+    background:var(--white);
+    border-radius:24px;
+    padding:30px;
+    position:relative;
+    z-index:1;
+  }
+  .cta-form h4{font-size:1.1rem; margin-bottom:18px; text-align:center;}
+  .cta-form .contact-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 0;
+    border-bottom:1px dashed #e6dcc0;
+    font-weight:600;
+    font-size:0.95rem;
+  }
+  .cta-form .contact-row:last-child{border-bottom:none;}
+  .cta-form .ic2{
+    width:38px;height:38px;
+    background:var(--cream-deep);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .cta-form .btn-primary{
+    width:100%;
+    text-align:center;
+    margin-top:18px;
+    display:block;
+  }
+
+  /* ===== FOOTER ===== */
+  footer{
+    background:var(--leaf-deep);
+    color:var(--cream);
+    padding:50px 0 24px;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:40px;
+    margin-bottom:36px;
+  }
+  .footer-brand{display:flex; align-items:center; gap:10px; font-family:'Baloo 2'; font-weight:800; font-size:1.2rem; margin-bottom:14px;}
+  .footer-brand .egg{
+    width:32px;height:32px;
+    background:var(--gold);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+  }
+  footer p{color:#cdd9b8; font-size:0.92rem; max-width:300px;}
+  footer h5{color:var(--gold-light); font-family:'Baloo 2'; font-size:0.95rem; margin-bottom:14px;}
+  footer ul li{margin-bottom:10px; font-size:0.92rem; color:#dbe5c6;}
+  .footer-bottom{
+    border-top:1px solid #5d7a45;
+    padding-top:22px;
+    text-align:center;
+    font-size:0.85rem;
+    color:#a9bf8f;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 880px){
+    .navlinks{display:none;}
+    .menu-toggle{display:block;}
+    .hero-grid{grid-template-columns:1fr; text-align:center;}
+    .hero p.lead{margin-left:auto; margin-right:auto;}
+    .hero-ctas{justify-content:center;}
+    .hero-stats{justify-content:center;}
+    .hero h1{font-size:2.4rem;}
+    .about-grid{grid-template-columns:1fr;}
+    .act-grid{grid-template-columns:repeat(2,1fr);}
+    .classinfo .wrap{grid-template-columns:1fr;}
+    .why-grid{grid-template-columns:repeat(2,1fr);}
+    .cta-box{grid-template-columns:1fr; text-align:center;}
+    .cta-box p{margin-left:auto; margin-right:auto;}
+    .footer-grid{grid-template-columns:1fr; text-align:center;}
+    footer p{margin:0 auto;}
+    .path-line{left:34px;}
+    .path-step{grid-template-columns:70px 1fr;}
+    .path-step:nth-child(even) .path-card,
+    .path-step:nth-child(odd) .path-card{grid-column:2;}
+    .path-step .leafnode{grid-column:1; width:54px;height:54px;font-size:1.3rem;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ollie-card{animation:none;}
+    .marquee-track{animation:none;}
+    .sparkle{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="brandmark">
+      <div class="egg">🐣</div>
+      First Bloom
+    </div>
+    <ul class="navlinks">
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#program">Program</a></li>
+      <li><a href="#aktivitas">Aktivitas</a></li>
+      <li><a href="#kelas">Jadwal Kelas</a></li>
+    </ul>
+    <a href="#daftar" class="nav-cta">Daftar Kelas</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">🌱 Kelas Anak Usia 1–3 Tahun</span>
+      <h1>Tumbuh & <span class="accent">mekar</span> bersama <span class="accent2">Ollie</span>, setiap akhir pekan</h1>
+      <p class="lead">First Bloom adalah kelas bermain dan eksplorasi untuk si kecil — sensory play, creative class, hingga petualangan outdoor, dirancang hangat, aman, dan penuh tawa bersama Ollie si bebek kecil.</p>
+      <div class="hero-ctas">
+        <a href="#daftar" class="btn-primary">Daftarkan Si Kecil →</a>
+        <a href="#program" class="btn-secondary">Lihat Program</a>
+      </div>
+      <div class="hero-stats">
+        <div><span class="num">1–3</span><span class="label">Tahun usia anak</span></div>
+        <div><span class="num">20</span><span class="label">Anak per sesi</span></div>
+        <div><span class="num">3</span><span class="label">Pengajar pendamping</span></div>
+        <div><span class="num">Sab–Min</span><span class="label">Setiap minggu</span></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <span class="sparkle s1">🌼</span>
+      <span class="sparkle s2">🍃</span>
+      <span class="sparkle s3">✨</span>
+      <div class="ollie-card">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="100" cy="170" rx="55" ry="8" fill="#4B6B33" opacity="0.12"/>
+          <path d="M60 95 C60 60 75 35 100 35 C125 35 140 60 140 95 L140 140 C140 165 122 178 100 178 C78 178 60 165 60 140 Z" fill="#F6DC9A"/>
+          <path d="M65 60 C70 40 88 28 100 28 C112 28 125 38 130 55 C115 48 105 45 100 45 C92 45 78 50 65 60 Z" fill="#FBF6E9" stroke="#E8A93C" stroke-width="2"/>
+          <circle cx="85" cy="92" r="7" fill="#33401F"/>
+          <circle cx="115" cy="92" r="7" fill="#33401F"/>
+          <circle cx="87" cy="89" r="2" fill="#fff"/>
+          <circle cx="117" cy="89" r="2" fill="#fff"/>
+          <ellipse cx="73" cy="108" rx="7" ry="5" fill="#F08A6C" opacity="0.55"/>
+          <ellipse cx="127" cy="108" rx="7" ry="5" fill="#F08A6C" opacity="0.55"/>
+          <path d="M92 108 Q100 118 108 108" stroke="#C4862A" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M85 100 L100 105 L85 110 Z" fill="#E8A93C"/>
+          <path d="M125 145 Q100 160 75 145 L75 165 Q100 178 125 165 Z" fill="#7B9A56"/>
+          <circle cx="100" cy="150" r="6" fill="#F6DC9A" stroke="#4B6B33" stroke-width="2"/>
+          <path d="M40 110 Q25 105 22 90" stroke="#F6DC9A" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <path d="M160 115 Q150 100 152 85" stroke="#F6DC9A" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-strip">
+  <div class="marquee-track">
+    <span>🌸 Sensory Play</span><span>🎨 Creative Learning</span><span>🤝 Social Interaction</span><span>🏃 Movement Activity</span><span>🌿 Eksplorasi Lingkungan</span><span>📖 Storytelling & Music</span>
+    <span>🌸 Sensory Play</span><span>🎨 Creative Learning</span><span>🤝 Social Interaction</span><span>🏃 Movement Activity</span><span>🌿 Eksplorasi Lingkungan</span><span>📖 Storytelling & Music</span>
+  </div>
+</div>
+
+<section class="about" id="tentang">
+  <div class="wrap about-grid">
+    <div class="about-text">
+      <span class="eyebrow">Filosofi Kami</span>
+      <h2>Setiap anak punya momen "mekar" pertamanya</h2>
+      <p>First Bloom melambangkan fase awal pertumbuhan anak — penuh rasa ingin tahu, kreativitas, dan potensi untuk berkembang. Kami percaya proses mekar itu lahir dari pengalaman bermain, belajar, eksplorasi, dan lingkungan yang positif.</p>
+      <p>Ollie, si anak bebek kecil dengan cangkang telur di kepalanya, adalah teman tumbuh si kecil — simbol keceriaan, keberanian mencoba hal baru, dan awal kehidupan yang penuh harapan.</p>
+      <div class="ollie-quote">"Belajar, bertanya, dan menjelajahi hal baru setiap hari!" — Ollie</div>
+    </div>
+    <div class="about-art">
+      <div class="meaning-row">
+        <div class="ic">🌱</div>
+        <div><h4>Tunas Daun</h4><p>Melambangkan awal pertumbuhan setiap anak.</p></div>
+      </div>
+      <div class="meaning-row">
+        <div class="ic">🌸</div>
+        <div><h4>Bunga Mekar</h4><p>Perkembangan dan potensi anak yang terus bertumbuh.</p></div>
+      </div>
+      <div class="meaning-row">
+        <div class="ic">⭕</div>
+        <div><h4>Lingkaran Energi</h4><p>Melambangkan kehidupan, semangat, dan harapan.</p></div>
+      </div>
+      <div class="meaning-row">
+        <div class="ic">🐣</div>
+        <div><h4>Ollie & Cangkang Telur</h4><p>Awal baru dan proses tumbuh bersama, langkah demi langkah.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="path-section" id="program">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">🛤️ Jalur Tumbuh Bersama Ollie</span>
+      <h2>Begini perjalanan si kecil di First Bloom</h2>
+      <p>Dari menyapa Ollie sampai pulang membawa cerita baru — setiap sesi dirancang sebagai pengalaman yang utuh.</p>
+    </div>
+    <div class="path-track">
+      <div class="path-line"></div>
+
+      <div class="path-step">
+        <div class="path-card">
+          <span class="tag">Pembukaan</span>
+          <h4>Menyapa & Pemanasan</h4>
+          <p>Si kecil disambut Ollie, bernyanyi dan bergerak ringan untuk mencairkan suasana sebelum kelas dimulai.</p>
+        </div>
+        <div class="leafnode">👋</div>
+        <div class="spacer"></div>
+      </div>
+
+      <div class="path-step">
+        <div class="spacer"></div>
+        <div class="leafnode">🖐️</div>
+        <div class="path-card">
+          <span class="tag">Eksplorasi</span>
+          <h4>Sensory Play</h4>
+          <p>Anak mengenal tekstur, warna, dan bentuk lewat permainan sensorik yang aman dan merangsang rasa ingin tahu.</p>
+        </div>
+      </div>
+
+      <div class="path-step">
+        <div class="path-card">
+          <span class="tag">Kreativitas</span>
+          <h4>Creative Art & Craft</h4>
+          <p>Menggambar, mewarnai, dan bermain balok — ruang bebas berekspresi tanpa batas bersama teman-teman.</p>
+        </div>
+        <div class="leafnode">🎨</div>
+        <div class="spacer"></div>
+      </div>
+
+      <div class="path-step">
+        <div class="spacer"></div>
+        <div class="leafnode">🏃</div>
+        <div class="path-card">
+          <span class="tag">Gerak & Sosial</span>
+          <h4>Movement & Team Games</h4>
+          <p>Aktivitas fisik ringan dan permainan kelompok untuk melatih motorik serta interaksi sosial anak.</p>
+        </div>
+      </div>
+
+      <div class="path-step">
+        <div class="path-card">
+          <span class="tag">Penutup</span>
+          <h4>Storytelling & Refleksi Bersama</h4>
+          <p>Kelas ditutup dengan cerita hangat dan waktu spesial parent & child sebelum pulang.</p>
+        </div>
+        <div class="leafnode">📖</div>
+        <div class="spacer"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="activities" id="aktivitas">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">🎈 Ragam Kegiatan</span>
+      <h2>Bermain sambil belajar, indoor & outdoor</h2>
+      <p>Beragam aktivitas yang disesuaikan dengan usia dan tahap tumbuh kembang si kecil.</p>
+    </div>
+    <div class="act-grid">
+      <div class="act-card"><div class="emoji">🧸</div><h4>Indoor Activity</h4><p>Belajar seru di dalam kelas bersama Ollie & teman-teman.</p></div>
+      <div class="act-card"><div class="emoji">🌳</div><h4>Outdoor Exploration</h4><p>Menjelajah alam dan mengenal lingkungan sekitar.</p></div>
+      <div class="act-card"><div class="emoji">🖌️</div><h4>Creative Art & Craft</h4><p>Menggambar, mewarnai, dan berkreasi bebas.</p></div>
+      <div class="act-card"><div class="emoji">🤲</div><h4>Sensory Play</h4><p>Eksplorasi tekstur dan bentuk yang aman untuk anak.</p></div>
+      <div class="act-card"><div class="emoji">🎵</div><h4>Storytelling & Music</h4><p>Cerita dan lagu yang menumbuhkan imajinasi.</p></div>
+      <div class="act-card"><div class="emoji">🐛</div><h4>Nature Learning</h4><p>Mengenal daun, bunga, dan makhluk kecil di sekitar.</p></div>
+      <div class="act-card"><div class="emoji">⚽</div><h4>Movement Games</h4><p>Permainan gerak untuk melatih motorik kasar.</p></div>
+      <div class="act-card"><div class="emoji">👨‍👩‍👧</div><h4>Parent & Child Time</h4><p>Momen kebersamaan orang tua dan anak di setiap sesi.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="classinfo" id="kelas">
+  <div class="wrap">
+    <div class="classinfo-text">
+      <span class="eyebrow">🗓️ Info Kelas</span>
+      <h2>Kelas kecil, perhatian penuh untuk si kecil</h2>
+      <p>Kami sengaja membatasi jumlah anak per sesi agar setiap momen bermain dan belajar terasa nyaman, dekat, dan benar-benar diperhatikan oleh tim pengajar.</p>
+      <div class="schedule-pill">📅 Setiap Sabtu & Minggu, ±60–90 menit</div>
+      <p style="font-size:0.9rem; color:#7c8a64;">Didampingi orang tua/wali sepanjang sesi berlangsung.</p>
+    </div>
+    <div class="classinfo-card">
+      <h3>Yang si kecil dapatkan</h3>
+      <ul class="classinfo-list">
+        <li><span class="dot">1</span> Usia anak 1–3 tahun, sesuai tahap tumbuh kembang</li>
+        <li><span class="dot">2</span> Maksimal 20 anak per sesi — tetap intim & terkontrol</li>
+        <li><span class="dot">3</span> Dipandu oleh 3 pengajar berpengalaman</li>
+        <li><span class="dot">4</span> Seluruh alat & media belajar disiapkan tim First Bloom</li>
+        <li><span class="dot">5</span> Pendekatan play-based learning yang menyenangkan</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">💛 Kenapa First Bloom</span>
+      <h2>Ruang tumbuh yang dipercaya orang tua</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="num">01</div>
+        <h4>Konsep Edukasi Modern</h4>
+        <p>Menggabungkan belajar dan bermain — pendekatan yang kini banyak dicari orang tua muda.</p>
+      </div>
+      <div class="why-card">
+        <div class="num">02</div>
+        <h4>Hangat & Ramah Anak</h4>
+        <p>Suasana kelas dirancang akrab, aman, dan menyenangkan dari awal hingga akhir sesi.</p>
+      </div>
+      <div class="why-card">
+        <div class="num">03</div>
+        <h4>Aktivitas Positif</h4>
+        <p>Mendukung tumbuh kembang sosial dan emosional anak lewat kegiatan yang terarah.</p>
+      </div>
+      <div class="why-card">
+        <div class="num">04</div>
+        <h4>Komunitas yang Tumbuh</h4>
+        <p>Lebih dari kelas — ruang bertemu sesama orang tua dan membangun komunitas parenting.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="daftar">
+  <div class="wrap">
+    <div class="cta-box">
+      <div class="blob blob1"></div>
+      <div>
+        <h2>Yuk, ajak si kecil mulai bertumbuh bersama Ollie 🐣</h2>
+        <p>Kuota kelas terbatas setiap minggunya. Hubungi kami untuk info jadwal terbaru dan reservasi tempat si kecil.</p>
+      </div>
+      <div class="cta-form">
+        <h4>Hubungi Kami</h4>
+        <div class="contact-row"><div class="ic2">📸</div> @first_bloom.id</div>
+        <div class="contact-row"><div class="ic2">✉️</div> firstbloom.id@gmail.com</div>
+        <div class="contact-row"><div class="ic2">📍</div> Semarapura, Klungkung, Bali</div>
+        <a href="https://instagram.com/first_bloom.id" target="_blank" class="btn-primary">Chat via Instagram →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><div class="egg">🐣</div> First Bloom</div>
+        <p>Kelas pengembangan anak usia dini berbasis bermain dan eksplorasi. Bloom together with Ollie.</p>
+      </div>
+      <div>
+        <h5>Jelajahi</h5>
+        <ul>
+          <li><a href="#tentang">Tentang Kami</a></li>
+          <li><a href="#program">Program</a></li>
+          <li><a href="#kelas">Jadwal Kelas</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Kontak</h5>
+        <ul>
+          <li>@first_bloom.id</li>
+          <li>firstbloom.id@gmail.com</li>
+          <li>Semarapura, Klungkung</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 First Bloom — Bloom Together With Ollie. Dibuat dengan 💛 untuk tumbuh kembang anak Indonesia.</div>
+  </div>
+</footer>
+
+<script>
+  // mobile nav toggle (simple show/hide for small screens, accessible fallback)
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', e=>{
+      const id=a.getAttribute('href');
+      const el=document.querySelector(id);
+      if(el){
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
